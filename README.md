@@ -14,11 +14,11 @@ Please fill out the details below carefully.
 
 ## 👥 Team Members  
 
-| S.No | Name         | Registration No. | VIT Email ID         | Personal Email ID  | Mobile No.  | 
-|------|--------------|------------------|----------------------|--------------------|-------------|
-| 1    |              |                  |                      |                    |             |
-| 2    |              |                  |                      |                    |             |
-| 3    |              |                  |                      |                    |             |
+| S.No | Name            | Reg No.   | VIT Email ID                      | Personal Email ID                | Mobile No.  | 
+|------|--------------   |---------- |----------------------             |--------------------              |-------------|
+| 1    | Pratyush Dubey  | 22BBS0064 |pratyush.dubey2022@vitstudent.ac.in|pratyushdubey2021@gmail.com       |8777494857   |
+| 2    | Anushika Verma  | 22BCE2301 |anushika.verma2022@vitstudent.ac.in|anu11421verma@gmail.com           |6351940851   |
+| 3    | Utkarsh Mathur  | 22BCT0129 |utkarsh.mathur2022@vitstudent.ac.in|utkarshbmathur04@gmail.com        |6205404964   |
 
 ---
 
