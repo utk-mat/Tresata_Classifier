@@ -1,3 +1,20 @@
+# 🚀 VIT-Tresata Hackathon 2025 - Team 8
+
+## 🆔 Team Information  
+- **Team Name:** Hackathon Team - 8
+- **Hackathon Theme:** Data Classification and Processing
+- **Selected Topic / Problem Statement:** Intelligent Data Classification and Parsing Pipeline
+
+## 👥 Team Members  
+
+| S.No | Name            | Reg No.   | VIT Email ID                      | Personal Email ID                | Mobile No.  | 
+|------|--------------   |---------- |----------------------             |--------------------              |-------------|
+| 1    | Pratyush Dubey  | 22BBS0064 |pratyush.dubey2022@vitstudent.ac.in|pratyushdubey2021@gmail.com       |8777494857   |
+| 2    | Anushika Verma  | 22BCE2301 |anushika.verma2022@vitstudent.ac.in|anu11421verma@gmail.com           |6351940851   |
+| 3    | Utkarsh Mathur  | 22BCT0129 |utkarsh.mathur2022@vitstudent.ac.in|utkarshbmathur04@gmail.com        |6205404964   |
+
+---
+
 # Tresata Classifier - Two-Stage Data Processing Pipeline
 
 A comprehensive data classification and parsing system that uses machine learning models to classify data into categories (phone, company, country, date, other) and then parses the classified data for structured extraction.
@@ -231,3 +248,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **Note**: The Random Forest classifier (`classifier2.py`) is the primary and recommended model for production use, offering superior performance, confidence analysis, and structured output compared to the Gemini API fallback.
+
+## 📁 Project Organization
+
+This project follows the hackathon folder structure:
+
+- `Code/` → All source code files (classifier2.py, classifier.py, parseB.py, etc.)
+- `Docs/` → Documentation, sample data, and output files
+- `Demo/` → Demo materials and presentations
