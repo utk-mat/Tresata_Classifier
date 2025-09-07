@@ -15,7 +15,7 @@ def setup_api_key():
     else:
         print("\n🚨 GOOGLE_API_KEY is not set.")
         print("Please run:")
-        print("export GOOGLE_API_KEY='AIzaSyD5kTuCzae-t7M5ZoiIpOhps-zh_dNbTWc'")
+        print("export GOOGLE_API_KEY=''")
         print("Or add to your shell profile (~/.zshrc, ~/.bashrc).")
 
 def main():
