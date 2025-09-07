@@ -1,15 +1,65 @@
-# Tresata Classifier with Gemini Fallback
+# Tresata Classifier - Two-Stage Data Processing Pipeline
 
-A data classification tool that uses regex patterns for initial classification and falls back to Google's Gemini AI for ambiguous cases.
+A comprehensive data classification and parsing system that uses machine learning models to classify data into categories (phone, company, country, date, other) and then parses the classified data for structured extraction.
 
-## Features
+## 🏗️ Architecture Overview
 
-- **Regex-based classification** for phone numbers, companies, countries, and dates
-- **Gemini AI fallback** for values that don't match regex patterns
-- **CSV processing** with configurable column names
-- **Error handling** with graceful fallbacks
+This project implements a **two-stage pipeline**:
 
-## Setup
+1. **Stage 1: Classification** - Uses machine learning models to categorize input data
+2. **Stage 2: Parsing** - Extracts structured information from classified data
+
+## 🤖 Classification Models
+
+### Primary Model: Random Forest Classifier (`classifier2.py`)
+
+The main classification engine uses a **Random Forest model** trained on feature-engineered data:
+
+- **Features**: Length, digit count, letter count, special characters, case analysis, punctuation patterns
+- **Categories**: phone, company, country, date, other
+- **Confidence Scoring**: Provides prediction probabilities for each class
+- **Performance Analysis**: Built-in confidence analysis and visualization
+- **Model Persistence**: Saves trained models for reuse
+
+#### Key Features:
+- ✅ **High Accuracy**: Trained Random Forest with 200 estimators
+- ✅ **Confidence Analysis**: Detailed prediction confidence metrics
+- ✅ **Feature Engineering**: 10+ engineered features for robust classification
+- ✅ **Model Persistence**: Saves/loads trained models automatically
+- ✅ **Performance Metrics**: Training accuracy and confidence distribution analysis
+
+### Secondary Model: Gemini API Fallback (`classifier.py`)
+
+A lightweight fallback classifier using Google's Gemini AI:
+
+- **Purpose**: Alternative classification method using AI
+- **Use Case**: When ML model is not available or for comparison
+- **Categories**: Same 5 categories as Random Forest model
+- **Integration**: Can be used alongside or instead of the ML model
+
+## 📊 Two-Stage Pipeline
+
+### Stage 1: Classification
+```bash
+# Train the Random Forest model
+python classifier2.py --train training_data.csv
+
+# Classify new data with confidence analysis
+python classifier2.py --input sample.csv --analyze
+```
+
+**Output**: CSV with classification results and confidence scores
+
+### Stage 2: Parsing (`parseB.py`)
+```bash
+# Parse classified data for structured extraction
+python parseB.py
+```
+
+**Input**: Classification output from Stage 1
+**Output**: Parsed data with extracted components
+
+## 🚀 Quick Start
 
 ### 1. Install Dependencies
 
@@ -17,89 +67,167 @@ A data classification tool that uses regex patterns for initial classification a
 pip install -r requirements.txt
 ```
 
-Or run the setup script:
+### 2. Train the Model (First Time)
 
 ```bash
-python setup.py
+python classifier2.py --train training_data.csv
 ```
 
-### 2. Configure Gemini API Key
-
-Get your API key from [Google AI Studio](https://makersuite.google.com/app/apikey) and set it as an environment variable:
+### 3. Run Complete Pipeline
 
 ```bash
+# Stage 1: Classify your data
+python classifier2.py --input your_data.csv --analyze
+
+# Stage 2: Parse the classified results
+python parseB.py
+```
+
+## 📋 Detailed Usage
+
+### Random Forest Classifier (`classifier2.py`)
+
+#### Training
+```bash
+python classifier2.py --train training_data.csv
+```
+- Requires CSV with `data` and `label` columns
+- Saves model as `ml_classifier.joblib`
+- Saves label encoder as `label_encoder.joblib`
+
+#### Classification
+```bash
+# Basic classification
+python classifier2.py --input sample.csv
+
+# With confidence analysis and visualization
+python classifier2.py --input sample.csv --analyze
+
+# Test single value with detailed scores
+python classifier2.py --test "+1-555-123-4567"
+```
+
+#### Output Columns
+- `phone`, `company`, `country`, `date`, `other`: Binary classification (0/1)
+- `predicted_label`: The predicted category
+- `{category}_score`: Confidence scores for each category
+- `ParsedCountry`, `ParsedNumber`: Extracted phone components
+- `ParsedCompanyName`, `ParsedLegalSuffix`: Extracted company components
+
+### Gemini Classifier (`classifier.py`)
+
+```bash
+# Set API key
 export GEMINI_API_KEY="your_api_key_here"
-```
 
-Or add it to your shell profile:
-
-```bash
-echo 'export GEMINI_API_KEY="your_api_key_here"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-## Usage
-
-### Basic Usage
-
-```bash
+# Run classification
 python classifier.py --input sample.csv --column data
 ```
 
-### Parameters
+### Parser (`parseB.py`)
 
-- `--input`: Path to input CSV file (required)
-- `--column`: Column name to classify (default: "data")
-
-### Output
-
-The classifier creates a new column `{column_name}_class` with the classification results and saves to `classification_output.csv`.
-
-## Classification Categories
-
-- **phone**: Valid phone numbers with proper country codes and lengths
-  - US/Canada (+1): 10 digits after country code
-  - UK (+44): 10-11 digits after country code  
-  - India (+91): 10 digits after country code
-  - Germany (+49): 10-12 digits after country code
-  - Australia (+61): 9 digits after country code
-  - Other countries: 7-15 digits total
-- **company**: Company names with common suffixes (Inc, Ltd, LLC, etc.)
-- **country**: Country names from the predefined list
-- **date**: Dates in YYYY-MM-DD or MM/DD/YYYY format
-- **other**: Everything else (including invalid phone numbers and Gemini fallback results)
-
-## How It Works
-
-1. **Regex Matching**: First attempts to classify using regex patterns
-2. **Gemini Fallback**: If no regex matches, sends the value to Gemini AI for classification
-3. **Error Handling**: If Gemini fails, defaults to "other"
-
-## Example
-
-Input CSV:
-```csv
-data
-+1-555-123-4567
-Apple Inc
-Germany
-2023-12-25
-Some random text
+```bash
+# Parse classification results
+python parseB.py
 ```
 
-Output CSV:
-```csv
-data,data_class
-+1-555-123-4567,phone
-Apple Inc,company
-Germany,country
-2023-12-25,date
-Some random text,other
+**Parsing Capabilities:**
+- **Phone Numbers**: Extracts country code and national number
+- **Company Names**: Separates base name from legal suffix using semantic similarity
+
+## 📈 Performance Analysis
+
+The Random Forest classifier includes comprehensive performance analysis:
+
+- **Confidence Distribution**: Histogram of prediction confidence scores
+- **Class Distribution**: Breakdown of predicted categories
+- **Confidence Levels**: High (≥0.8), Medium (0.6-0.8), Low (<0.6)
+- **Statistical Metrics**: Mean, median, standard deviation of confidence
+
+## 📁 Project Structure
+
+```
+Tresata_Classifier/
+├── classifier2.py          # Main Random Forest classifier
+├── classifier.py           # Gemini API classifier (fallback)
+├── parseB.py              # Second-stage parser
+├── TrainB.py              # Training utilities
+├── ml_classifier.joblib   # Trained Random Forest model
+├── label_encoder.joblib   # Label encoder for model
+├── legal_suffixes.json    # Company legal suffixes database
+├── data/
+│   ├── company_suffixes.txt
+│   └── countries.txt
+├── requirements.txt       # Python dependencies
+└── setup.py              # Setup script
 ```
 
-## Error Handling
+## 🔧 Dependencies
 
-- Invalid API keys: Falls back to "other"
-- Network issues: Falls back to "other"
-- Invalid input: Returns "other"
-- Missing files: Shows appropriate error messages
+### Core Dependencies
+- `pandas` - Data manipulation
+- `scikit-learn` - Machine learning (Random Forest)
+- `numpy` - Numerical operations
+- `joblib` - Model persistence
+
+### ML & NLP
+- `sentence-transformers` - Semantic similarity for company parsing
+- `phonenumbers` - Phone number validation and parsing
+
+### Visualization
+- `matplotlib` - Plotting
+- `seaborn` - Statistical visualization
+
+### Optional
+- `google-generativeai` - Gemini API integration
+
+## 📊 Classification Categories
+
+| Category | Description | Examples |
+|----------|-------------|----------|
+| **phone** | Valid phone numbers | `+1-555-123-4567`, `+44 20 7946 0958` |
+| **company** | Company names with legal suffixes | `Apple Inc`, `Microsoft Corporation` |
+| **country** | Country names | `United States`, `Germany`, `India` |
+| **date** | Date formats | `2023-12-25`, `12/25/2023` |
+| **other** | Everything else | Invalid data, random text |
+
+## 🎯 Use Cases
+
+- **Data Cleaning**: Automatically categorize and structure messy data
+- **Contact Information Extraction**: Parse phone numbers and company details
+- **Data Validation**: Identify and flag invalid or malformed entries
+- **ETL Pipelines**: Integrate into data processing workflows
+- **Data Quality Assessment**: Analyze confidence scores for data quality metrics
+
+## 🔍 Advanced Features
+
+### Confidence Analysis
+- Real-time confidence scoring for each prediction
+- Confidence distribution visualization
+- Quality metrics for data assessment
+
+### Semantic Company Parsing
+- Uses sentence transformers for intelligent suffix matching
+- Handles variations in legal entity naming
+- Extracts base company names and legal suffixes
+
+### Phone Number Validation
+- International phone number validation
+- Country code extraction
+- National number formatting
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test with sample data
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+**Note**: The Random Forest classifier (`classifier2.py`) is the primary and recommended model for production use, offering superior performance, confidence analysis, and structured output compared to the Gemini API fallback.

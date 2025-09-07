@@ -1,0 +1,18 @@
+{
+  "total_predictions": 1551,
+  "avg_confidence": 0.766982591876209,
+  "median_confidence": 1.0,
+  "min_confidence": 0.36,
+  "max_confidence": 1.0,
+  "confidence_std": 0.25889037946889376,
+  "high_confidence_predictions": 842,
+  "medium_confidence_predictions": 0,
+  "low_confidence_predictions": 709,
+  "class_distribution": {
+    "phone": 987,
+    "other": 564
+  },
+  "high_confidence_percentage": 54.29,
+  "medium_confidence_percentage": 0.0,
+  "low_confidence_percentage": 45.71
+}
